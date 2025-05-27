@@ -1,0 +1,61 @@
+.admin-container {
+  font-family: Arial, sans-serif;
+  background-color: white;    
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    text-align: center;
+    color: #0078d7;
+    margin: 5rem 0;
+  }
+
+  p {
+    text-align: center;
+  }
+  .admin-table {
+    width: 70%;
+    border-collapse: collapse;
+
+    thead tr {
+      background-color: #007bff;
+      color: white;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    td.capitalize {
+      text-transform: capitalize;
+      text-align: left;
+    }
+
+    tr {
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    tr.active:hover {
+      background-color: #e9ecef;
+    }
+    tr.completed {
+      background-color: #f8f9fa;
+    }
+
+    .status-completed {
+      color: green;
+      font-weight: bold;
+      text-align: left;
+    }
+    .status-active {
+      color: orange;
+      font-weight: bold;
+      text-align: left;
+    }
+  }
+}
