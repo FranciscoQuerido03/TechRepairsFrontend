@@ -18,14 +18,31 @@ const FaceIDButton = () => {
 
     try {
       await faceIDLogin(formData);
-    } catch (error) {
+      const token = localStorage.getItem('accessToken');
+      const pendingBooking = localStorage.getItem('pendingBooking');
+
+      if (pendingBooking) {
+        await fetch(import.meta.env.VITE_APP_BACKEND + 'store/create_booking/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: pendingBooking,
+        })
+        localStorage.removeItem('pendingBooking');
+        alert('Marcação efetuada com sucesso!');
+      } 
+    }catch (error) {
       console.error("Erro no login FaceID:", error);
     }
   };
 
+
+
   return (
     <>
-      <button onClick={handleButtonClick}>FaceID</button>
+      <button type="button" onClick={handleButtonClick}>FaceID</button>
       <input
         type="file"
         accept="image/*"

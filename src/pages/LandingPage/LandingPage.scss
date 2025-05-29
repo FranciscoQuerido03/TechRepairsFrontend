@@ -1,153 +1,141 @@
 .landing-page {
-    display: flex;
-    flex-direction: column;
-    font-family: Arial, sans-serif;
-    color: #333;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+  color: #333;
+  min-height: 100vh;
 
-    .landing-header {
-        background-color: #0078d7;
-        color: #fff;
-        text-align: center;
-        padding: 2rem;
+  .landing-header {
+    background-color: #0078d7;
+    color: #fff;
+    text-align: center;
+    padding: 4vh 2vw;
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 2.5rem;
-        }
-
-        p {
-            font-size: 1.2rem;
-        }
-
-        .cta-button {
-            background-color: #fff;
-            color: #0078d7;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            font-size: 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-
-            &:hover {
-                background-color: #e6e6e6;
-            }
-        }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
     }
 
-    .services-section {
-        padding: 2rem;
-        background-color: #f9f9f9;
-        height: 50%;     
-          
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 2.5rem;
-            text-align: center;
-        }
-
-        p {
-            text-align: center;
-            font-size: 1.2rem;
-        }
-
-
-        .content{
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            justify-content: center;
-            gap: 4rem;
-            margin-top: -3rem;
-
-            .services {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 7rem;
-
-                .service-card {
-                    background-color: #fff;
-                    border: 1px solid #ddd;
-                    border-radius: 8px;
-                    padding: 1rem;
-                    margin: 0.5rem;
-                    width: 20rem;
-                    height: auto;
-                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                    text-align: center;
-
-                    h3 {
-                        margin-bottom: 0.5rem;
-                        color: #0078d7;
-                    }
-
-                    p {
-                        font-size: 0.9rem;
-                    }
-                }
-            }
-            .more-services {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                .cta-button {
-                    align-items: center;
-                    justify-content: center;
-                    background-color: #0078d7;
-                    color: white;
-                    border: none;
-                    padding: 0.8rem 1.5rem;
-                    font-size: 1rem;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    transition: background-color 0.3s;
-
-                    &:hover {
-                        background-color: #e6e6e6;
-                    }
-                }
-            }
-
-        }
+    p {
+      font-size: 1.2rem;
     }
 
-    .about-section {
+    .cta-button {
+      background-color: #fff;
+      color: #0078d7;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #e6e6e6;
+      }
+    }
+  }
+
+  .services-section {
+    padding: 4vh 4vw;
+    background-color: #f9f9f9;
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    p {
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+      margin-top: 2rem;
+
+      .services {
         display: flex;
-        flex-direction: column;
-        padding: 2rem;
-        text-align: center;
-        color: black;
-        height: 25%;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
 
+        .service-card {
+          background-color: #fff;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          padding: 2rem;
+          width: clamp(15rem, 20%, 22rem);
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          text-align: center;
 
-        h1 {
-            margin-bottom: 3rem;
+          h3 {
+            margin-bottom: 0.5rem;
+            color: #0078d7;
+          }
+
+          p {
+            font-size: 1rem;
+          }
         }
+      }
 
-        p {
-            font-size: 1.15rem;
-            max-width: 50rem;
-            margin: 0 auto;
-        }
-    }
-
-    .landing-footer {
+      .more-services {
         display: flex;
         justify-content: center;
-        align-items: center;
-        background-color: #333;
-        color: #fff;
-        text-align: center;
-        padding: 1rem;
-        height: 10%;
 
-        p {
-            margin: 0;
-            font-size: 0.9rem;
+        .cta-button {
+          background-color: #0078d7;
+          color: white;
+          border: none;
+          padding: 0.8rem 1.5rem;
+          font-size: 1rem;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+
+          &:hover {
+            background-color: #005fa3;
+          }
         }
+      }
     }
-}
+  }
 
+  .about-section {
+    display: flex;
+    flex-direction: column;
+    padding: 4vh 4vw;
+    text-align: center;
+    color: black;
+
+    h1 {
+      margin-bottom: 2rem;
+    }
+
+    p {
+      font-size: 1.15rem;
+      max-width: 50rem;
+      margin: 0 auto;
+    }
+  }
+
+  .landing-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 2vh;
+    height: 11vh;
+
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+  }
+}

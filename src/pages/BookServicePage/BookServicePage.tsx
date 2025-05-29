@@ -14,10 +14,11 @@ const BookService: React.FC = () => {
 
   const [formData, setFormData] = useState({ date: '', time: '', type: 'standard' });
   const [repairName, setRepairName] = useState('');
+  const [busyTimes, setBusyTimes] = useState<string[]>([]);
+  const [availableSlots, setAvailableSlots] = useState<string[]>([]);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_APP_BACKEND}store/get_repair_by_id/${serviceId}/`, {
-      method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
       .then(res => res.json())
@@ -25,48 +26,57 @@ const BookService: React.FC = () => {
       .catch(() => alert('Erro ao carregar serviço'));
   }, [serviceId]);
 
+  const generateTimeSlots = () => {
+    const slots: string[] = [];
+    let [hour, minute] = workStart.split(':').map(Number);
+    const [endHour, endMinute] = workEnd.split(':').map(Number);
+
+    while (hour < endHour || (hour === endHour && minute <= endMinute)) {
+      const time = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+      slots.push(time);
+      minute += 30;
+      if (minute >= 60) {
+        hour += 1;
+        minute = 0;
+      }
+    }
+
+    return slots;
+  };
+
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const selectedDate = new Date(value);
+
     if (selectedDate.getDay() === 0 || selectedDate.getDay() === 6) {
       alert("Fins de semana não são permitidos.");
       e.target.value = "";
       setFormData({ ...formData, date: "", time: "" });
+      setAvailableSlots([]);
       return;
     }
+
     setFormData({ ...formData, date: value, time: "" });
-  };
 
-  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedTime = e.target.value;
-    const now = new Date();
-    const selectedDate = new Date(formData.date);
+    fetch(`${import.meta.env.VITE_APP_BACKEND}store/get_bookings_for_date/?date=${value}`)
+      .then(res => res.json())
+      .then(data => {
+        const booked = data.map((b: any) => b.appointment_time.slice(0, 5));
+        setBusyTimes(booked);
 
-    // Só validar se data e hora preenchidas
-    if (!formData.date) {
-      alert("Por favor, selecione primeiro uma data válida.");
-      e.target.value = "";
-      setFormData({ ...formData, time: "" });
-      return;
-    }
+        const now = new Date();
+        const allSlots = generateTimeSlots();
+        const available = allSlots.filter(slot => {
+          const isBusy = booked.includes(slot);
+          const isPastToday =
+            selectedDate.toDateString() === now.toDateString() &&
+            slot <= now.toTimeString().slice(0, 5);
+          return !isBusy && !isPastToday;
+        });
 
-    // Limitar ao horário expediente
-    if (selectedTime < workStart || selectedTime > workEnd) {
-      alert(`Hora deve estar entre ${workStart} e ${workEnd}.`);
-      e.target.value = "";
-      setFormData({ ...formData, time: "" });
-      return;
-    }
-
-    // Se data é hoje, não permitir horas passadas
-    if (selectedDate.toDateString() === now.toDateString() && selectedTime <= now.toTimeString().slice(0,5)) {
-      alert("Não pode selecionar horas já passadas hoje.");
-      e.target.value = "";
-      setFormData({ ...formData, time: "" });
-      return;
-    }
-
-    setFormData({ ...formData, time: selectedTime });
+        setAvailableSlots(available);
+      })
+      .catch(() => alert("Erro ao carregar horários ocupados."));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -121,16 +131,20 @@ const BookService: React.FC = () => {
             />
           </label>
           <label>Hora:
-            <input
-              type="time"
+            <select
               name="time"
               required
-              min={workStart}
-              max={workEnd}
-              onChange={handleTimeChange}
+              disabled={!formData.date || availableSlots.length === 0}
               value={formData.time}
-              disabled={!formData.date}
-            />
+              onChange={e => setFormData({ ...formData, time: e.target.value })}
+            >
+              <option value="">Selecione uma hora</option>
+              {generateTimeSlots().map(time => (
+                <option key={time} value={time} disabled={busyTimes.includes(time)}>
+                  {time}
+                </option>
+              ))}
+            </select>
           </label>
           <label>Tipo de Serviço:
             <select
@@ -143,6 +157,7 @@ const BookService: React.FC = () => {
               <option value="urgent">Urgente (+€20)</option>
             </select>
           </label>
+
           <button type="submit">Confirmar Marcação</button>
         </form>
       </div>

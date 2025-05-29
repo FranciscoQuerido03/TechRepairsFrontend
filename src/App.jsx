@@ -4,7 +4,6 @@ import ProtectedRoute from './components/ProtectRoute/ProtectRoute';
 import AdminPage from './pages/AdminPage/AdminPage.tsx';
 import AdminDetails from './pages/AdminDetailsPage/AdminDetailsPage.tsx';
 import LoginPage from './pages/LoginPage/LoginPage.tsx';
-import HomePage from './pages/HomePage/HomePage.tsx';
 import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 import ServicePage from "./pages/ServicesPage/ServicesPage.tsx";
 import ServiceStatusPage from "./pages/ServicesStatus/ServicesStatusPage.tsx";
@@ -20,7 +19,6 @@ export default function App() {
         <Routes>
         <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/home" element={<HomePage />} />
           <Route path="/services" element={<ServicePage />} />
           <Route path="/serviceStatus/:id" element={<ServiceStatusPage />} />
           <Route path="/bookService/:serviceId" element={<BookService />} />

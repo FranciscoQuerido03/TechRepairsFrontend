@@ -38,7 +38,7 @@ const ServiceStatus: React.FC = () => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${auth.accessToken}`,
       },
-      body: JSON.stringify({ status: newStatus }),
+      body: JSON.stringify({ acao: action, status: newStatus }),
     })
       .then(res => {
         if (!res.ok) throw new Error();
@@ -68,7 +68,12 @@ const ServiceStatus: React.FC = () => {
 
         {repair.status.toLowerCase() === 'aguarda pagamento' && (
           <>
-            <div className="info-line"><strong>Info:</strong> {repair.extra_service}</div>
+            <div className="info-line">
+              <strong>Serviço Extra:</strong> {repair.extra_service || 'N/D'}
+            </div>
+            <div className="info-line">
+              <strong>Preço Adicional:</strong> {repair.extra_price != null ? `${repair.extra_price} €` : 'N/D'}
+            </div>
             <div className="status-update">
               <button onClick={() => handleAction('pagar')}>Pagar</button>
               <button onClick={() => handleAction('rejeitar')}>Rejeitar</button>

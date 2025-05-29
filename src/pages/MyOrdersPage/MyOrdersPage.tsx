@@ -36,10 +36,19 @@ const MyOrdersPage: React.FC = () => {
         return res.json();
       })
       .then(data => {
-        console.log(data);
         const sorted = data.sort((a, b) => {
+          // Canceladas no fim
+          if (a.status === 'cancelada' && b.status !== 'cancelada') return 1;
+          if (a.status !== 'cancelada' && b.status === 'cancelada') return -1;
+
+          // Concluídas antes das canceladas, mas depois de ativas
           if (a.status === 'concluído' && b.status !== 'concluído') return 1;
           if (a.status !== 'concluído' && b.status === 'concluído') return -1;
+
+          // Urgentes vêm antes de normais (desde que não sejam canceladas ou concluídas)
+          if (a.type === 'urgente' && b.type !== 'urgente') return -1;
+          if (a.type !== 'urgente' && b.type === 'urgente') return 1;
+
           return 0;
         });
         setRepairs(sorted);
@@ -79,7 +88,13 @@ const MyOrdersPage: React.FC = () => {
                     <td>{repair.appointment_date}</td>
                     <td>{repair.appointment_time}</td>
                     <td className="capitalize">{repair.type}</td>
-                    <td className={repair.status === 'concluído' ? 'status-completed' : 'status-active'}>
+                    <td className={
+                      repair.status === 'concluído' ? 'status-completed' :
+                      repair.status === 'pendente' ? 'status-pending' :
+                      repair.status === 'cancelada' ? 'status-cancelled' :
+                      repair.status === 'aguarda pagamento' ? 'status-awaiting-payment' :
+                      'status-active'
+                    }>
                       {repair.status}
                     </td>
                 </tr>

@@ -1,3 +1,4 @@
+// AdminDetails.tsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -9,25 +10,35 @@ const AdminDetails: React.FC = () => {
   const [repair, setRepair] = useState<any>(null);
   const [status, setStatus] = useState('');
   const [extraService, setExtraService] = useState('');
+  const [extraPrice, setExtraPrice] = useState('');
   const auth = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_APP_BACKEND}store/get_booking_by_id/${id}/`, {
-      headers: {
-        Authorization: `Bearer ${auth.accessToken}`,
-      },
+      headers: { Authorization: `Bearer ${auth.accessToken}` },
     })
       .then(res => res.json())
       .then(data => {
         setRepair(data);
         setStatus(data.status);
         setExtraService(data.extra_service || '');
+        setExtraPrice(data.extra_price || '');
       })
       .catch(() => alert('Erro ao carregar os detalhes.'));
   }, [id, auth.accessToken]);
 
   const handleStatusChange = () => {
+    let acao = 'update';
+
+    if (status === 'aguarda pagamento') {
+      if (!extraService.trim() || !extraPrice.trim()) {
+        alert('Preenche o serviço extra e o valor.');
+        return;
+      }
+      acao = 'extra';
+    }
+
     fetch(`${import.meta.env.VITE_APP_BACKEND}store/update_booking/${id}/`, {
       method: 'POST',
       headers: {
@@ -35,8 +46,10 @@ const AdminDetails: React.FC = () => {
         Authorization: `Bearer ${auth.accessToken}`,
       },
       body: JSON.stringify({
+        acao,
         status,
         extra_service: status === 'aguarda pagamento' ? extraService : undefined,
+        extra_price: status === 'aguarda pagamento' ? parseFloat(extraPrice) : undefined,
       }),
     })
       .then(res => {
@@ -65,18 +78,27 @@ const AdminDetails: React.FC = () => {
           <label>Alterar Estado:</label>
           <select value={status} onChange={(e) => setStatus(e.target.value)}>
             <option value="pendente">Pendente</option>
-            <option value="em reparação">Em Reparação</option>
             <option value="aguarda pagamento">Aguarda Pagamento</option>
+            <option value="em reparação">Em Reparação</option>
             <option value="concluído">Concluído</option>
           </select>
 
           {status === 'aguarda pagamento' && (
             <div className="extra-service-input">
-              <label>Detalhes do Serviço Extra:</label>
+              <label>Descrição do Serviço Extra:</label>
               <textarea
                 value={extraService}
                 onChange={(e) => setExtraService(e.target.value)}
-                placeholder="Ex: Substituição de bateria, custo adicional de 30€..."
+                placeholder="Ex: Substituição de bateria..."
+              />
+              <label>Valor (€):</label>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value={extraPrice}
+                onChange={(e) => setExtraPrice(e.target.value)}
+                placeholder="Ex: 30.00"
               />
             </div>
           )}

@@ -140,7 +140,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 				} else {
 					setIsStaff(false);
 					localStorage.setItem('isStaff', 'false');
-					navigate('/home/');
+					navigate('/');
 				}
 			} else {
 				const errorData = response.data;
@@ -157,7 +157,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 	}, []);
 
 	return (
-		<AuthContext.Provider value={{ accessToken, refreshToken, login, logout, isStaff }}>
+		<AuthContext.Provider value={{ accessToken, refreshToken, login, faceIDLogin, logout, isStaff }}>
 			{children}
 		</AuthContext.Provider>
 	);

@@ -44,29 +44,6 @@ const LoginPage = () => {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
-    }
-  };
-
-  const faceID = async (e) => {
-    e.preventDefault();
-    if (!selectedFile) {
-      setLoginError('Por favor selecione uma fotografia para o FaceID.');
-      return;
-    }
-    try {
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-
-      await auth.faceIDLogin(formData);
-      setLoginError('');
-    } catch (error) {
-      setLoginError('Erro ao fazer login com FaceID. Por favor tente outra vez.');
-    }
-  };
-
   return (
     <div className="login-page">
       <form className="login" onSubmit={handleLogin}>

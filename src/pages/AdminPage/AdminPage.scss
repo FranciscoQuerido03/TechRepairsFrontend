@@ -57,5 +57,20 @@
       font-weight: bold;
       text-align: left;
     }
+    .status-pending {
+      color: blue;
+      font-weight: bold;
+      text-align: left;
+    }
+    .status-cancelled {
+      color: gray;
+      font-weight: bold;
+      text-align: left;
+    }
+    .status-awaiting-payment {
+      color: red;
+      font-weight: bold;
+      text-align: left;
+    }
   }
 }
